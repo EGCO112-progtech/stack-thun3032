@@ -9,6 +9,36 @@
       "comparison": "included",
       "timeout": 10,
       "points": 2
+    },
+    {
+      "name": "test correct",
+      "setup": "make",
+      "run": "./stack {[]}[] {[]] [] {{  }}",
+      "input": "",
+      "output": "correct",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "test",
+      "setup": "make",
+      "run": "./stack {[]}[] {[]] [] {{  }}",
+      "input": "",
+      "output": "incorrect",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "mismatch",
+      "setup": "make",
+      "run": "./stack {[]}[] {[]] [] {{  }}",
+      "input": "",
+      "output": "mismatch",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
     }
   ]
 }
