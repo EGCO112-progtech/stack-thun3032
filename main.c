@@ -4,48 +4,67 @@
 #include "node.h"
 #include "stack.h"
 
-void push(StackPtr s, int value);
-int pop(StackPtr s);
+void push(StackPtr s, char value);
+char pop(StackPtr s);
 void pop_all(StackPtr s);
 
 int main(int argc, char **argv){
   
   int i,N,j;
+  int error,count;
   Stack s;
   s.top=NULL;
   s.size=0;
   NodePtr top=NULL;
   
   for(i=1;i<argc;i++){
-    push(&s,atoi(argv[i]));
+    error=0;
+    count=0;
+    for(j=0;j<strlen(argv[i]);j++){
+      switch(argv[i][j]){
+        case '{':
+        case '[':
+          push(&s,argv[i][j]);
+          count++;
+          //printf("%d ",count);
+          break;
+        case '}':{
+          count--;
+          if(pop(&s)!='{') error=1;
+          else error=0;
+          //printf("%d ",count);
+          break;
+        }
+        case ']':{
+          count--;
+          if(pop(&s)!='[') error=1;
+          else error=0;
+          //printf("%d ",count);
+          break;
+        }
+      }
+      if(error==1) break;
+    }
+    if(count>0){
+      printf("argv %d incorrect: too many opened parenthesis.\n",i);
+    }
+    else if(count<0){
+      printf("argv %d incorrect: too many closed parenthesis.\n",i);
+    }
+    else{
+      if(error==0){
+        printf("argv %d correct!\n",i);
+      }
+      else if(error==1){
+        printf("argv %d incorrect: mismatch.\n",i);
+      }
+    }
   }
-
-  /*while(s.size>0){
-    pop(&s);
-  }*/
   pop_all(&s);
-
- /*
- Stack s;
- printf("Checking the parentheses in argv arguments\n");
-  for(i=1;i<argc;i++){
-   
-     for(j=0;j<strlen(argv[i]);j++){
-       // Use stack to help with the parentheses
-
-
-     }
-
-
-  }
-*/
-
-
-
    return 0;
 }
 
-void push(StackPtr s, int value){
+void push(StackPtr s, char value){
   NodePtr new_node=(NodePtr) malloc(sizeof(Node));
   if(new_node){
     new_node->data=value;
@@ -55,7 +74,7 @@ void push(StackPtr s, int value){
   }
 }
 
-int pop(StackPtr s){
+char pop(StackPtr s){
   int value;
   NodePtr t =s->top;
   if(s->size>0){
@@ -66,13 +85,11 @@ int pop(StackPtr s){
     free(t);
     return value;
   }
-  else printf("\nNo more data available");
-  return 0;
 }
 
 void pop_all(StackPtr s){
   int value;
-  printf("Removing data: ");
+  //printf("Removing data: ");
   while(s->top!=NULL){
     NodePtr t =s->top;
     value=t->data;
